@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SepatuKita - Pesan Sepatu</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    function toggleRekening() {
+      const metode = document.getElementById("metode").value;
+      const infoRekening = document.getElementById("info-rekening");
+      const infoUpload = document.getElementById("info-upload");
+
+      if (metode === "transfer") {
+        infoRekening.style.display = "block";
+        infoUpload.style.display = "block";
+      } else {
+        infoRekening.style.display = "none";
+        infoUpload.style.display = "none";
+      }
+    }
+
+    function kirimPesanWA() {
+      const nama = document.getElementById('nama').value;
+      const produk = document.getElementById('produk').value;
+      const ukuran = document.getElementById('ukuran').value;
+      const alamat = document.getElementById('alamat').value;
+      const metode = document.getElementById('metode').value;
+
+      if (!nama || !produk || !ukuran || !alamat || !metode) {
+        alert("Harap isi semua data.");
+        return;
+      }
+
+      let pesan = `Halo Admin, saya ingin memesan sepatu:
+
+👤 Nama: ${nama}
+👟 Produk: ${produk}
+📏 Ukuran: ${ukuran}
+📬 Alamat: ${alamat}
+💳 Metode Pembayaran: ${metode === 'transfer' ? 'Transfer ke Dana' : 'COD'}`;
+
+      if (metode === 'transfer') {
+        pesan += `
+
+🔔 Saya akan mengirim bukti transfer segera.`;
+      }
+
+      const nomorWa = '6282340369636'; // Ganti sesuai nomor admin
+      const url = `https://wa.me/${nomorWa}?text=${encodeURIComponent(pesan)}`;
+
+      window.open(url, '_blank');
+    }
+
+    // Isi otomatis nama produk dari URL
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const produk = params.get("produk");
+      if (produk) {
+        document.getElementById("produk").value = produk;
+      }
+    };
+  </script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1 class="logo">SepatuKita</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="produk.html">Produk</a></li>
+          <li><a href="tentang.html">Tentang Kami</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+          <li><a href="pesanSepatu.html" class="active">Pesan Sepatu Sekarang</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="pesan">
+    <div class="container">
+      <h2>Formulir Pemesanan Sepatu</h2>
+      <form class="form-pesan">
+        <label for="nama">Nama Lengkap:</label>
+        <input type="text" id="nama" name="nama" required>
+
+        <label for="produk">Nama Produk:</label>
+        <input type="text" id="produk" name="produk" readonly required>
+
+        <label for="ukuran">Ukuran Sepatu:</label>
+        <input type="number" id="ukuran" name="ukuran" min="35" max="47" required>
+
+        <label for="alamat">Alamat Pengiriman:</label>
+        <textarea id="alamat" name="alamat" rows="4" required></textarea>
+
+        <label for="metode">Metode Pembayaran:</label>
+        <select id="metode" name="metode" onchange="toggleRekening()" required>
+          <option value="">-- Pilih Metode --</option>
+          <option value="cod">COD (Bayar di Tempat)</option>
+          <option value="transfer">Transfer ke Dana</option>
+        </select>
+
+        <div id="info-rekening" style="display: none; margin-top: 10px;">
+          <p><strong>Silakan transfer ke rekening Dana berikut:</strong></p>
+          <p>Nama: <strong>sebastianus efraye galdin</strong></p>
+          <p>Nomor Dana: <strong>082340369636</strong></p>
+          <p>Setelah transfer, mohon kirim <strong>bukti transfer</strong> melalui WhatsApp setelah klik tombol di bawah.</p>
+        </div>
+
+        <div id="info-upload" style="display: none; margin-top: 10px;">
+          <p><strong>📸 Upload bukti transfer</strong> ke Google Drive / imgbb, lalu kirim link-nya ke WhatsApp Admin setelah klik tombol di bawah.</p>
+        </div>
+
+        <button type="button" class="btn-primary" onclick="kirimPesanWA()">Kirim Pesanan via WhatsApp</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 SepatuKita. Semua hak cipta dilindungi.</p>
+    </div>
+  </footer>
+</body>
+</html>
